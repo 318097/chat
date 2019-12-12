@@ -1,16 +1,17 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
+import Header from './components/layouts/Header';
+
 import Home from './components/Home';
 import UserChat from './components/UserChat';
 
-import './App.css';
+import './App.scss';
 
 const App = () => {
   return (
     <div className="app">
-      <header className="app-header">
-      </header>
+      <Header />
       <div className="content">
         <Switch>
           <Route path="/home" exact component={Home} />
