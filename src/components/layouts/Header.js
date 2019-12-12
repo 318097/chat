@@ -3,9 +3,9 @@ import React from 'react'
 const Header = () => {
   return (
     <header className="app-header">
-      Chat
+      <h1>Chat</h1>
     </header>
-  )
+  );
 };
 
 export default Header;

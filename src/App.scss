@@ -1,0 +1,8 @@
+section#chat{
+  display: flex;
+  flex-direction: column;
+  .chat-container{
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
+}
