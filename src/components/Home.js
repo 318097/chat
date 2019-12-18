@@ -12,10 +12,10 @@ const Home = () => {
 
   useEffect(() => {
     const fetchContactList = async () => {
-      const { data } = await axios.get(`/contactList`);
-      setContactList(data);
+      const { data: { contacts } } = await axios.get(`/chat/contact-list`);
+      setContactList(contacts);
     };
-    // fetchContactList();
+    fetchContactList();
   }, []);
 
   return (
