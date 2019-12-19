@@ -1,21 +1,25 @@
-import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
+import axios from "axios";
 
-import config from './config';
+import config from "./config";
 
-import Header from './components/layouts/Header';
+import Header from "./components/layouts/Header";
 
-import Home from './components/Home';
-import UserChat from './components/UserChat';
+import Home from "./components/Home";
+import UserChat from "./components/UserChat";
 
-import './App.scss';
-
+import socket, { CONNECT } from "./socket";
+import "./App.scss";
 
 axios.defaults.baseURL = config.SERVER_URL;
-axios.defaults.headers.common["external-source"] = 'CHAT_APP';
+axios.defaults.headers.common["external-source"] = "CHAT_APP";
 
 const App = () => {
+  useEffect(() => {
+    socket.on(CONNECT, () => console.log("Connected.."));
+  }, []);
+
   return (
     <div className="app">
       <Header />

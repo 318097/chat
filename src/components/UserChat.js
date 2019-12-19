@@ -1,56 +1,59 @@
 import React, { useState, useEffect } from "react";
 import { TextArea, Button, Icon } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
-import styled from "styled-components";
 import axios from "axios";
+import queryString from "query-string";
 
 import Message from "./Message";
+import { Header, Actions } from "../styled";
 
-const Header = styled.div`
-  margin-bottom: 10px;
-  background: lightgrey;
-  padding: 10px 5px;
-`;
-
-const Actions = styled.div`
-  z-index: 5;
-  background: inherit;
-  position: relative;
-  display: flex;
-  margin-top: 15px;
-  textarea,
-  button {
-    margin: 0 2px;
-  }
-  textarea {
-    flex: 1 1 auto;
-  }
-`;
+import socket, { USER_INFO, MESSAGE, NEW_MESSAGE } from "../socket";
 
 const UserChat = ({ history, match }) => {
   const [chat, setChat] = useState([
-    { message: "hi", date: "2019-1-1", _id: "32" },
-    { message: "hi dsfs sdf sd sdf", date: "2019-1-1", _id: "323232" },
-    {
-      message: "hi sdfjlk jsdof jsdof jdsofkdsfkl ",
-      date: "2019-1-1",
-      _id: "3232",
-      user: "me"
-    },
-    { message: "hi", date: "2019-1-1", _id: "32df" }
+    // { message: "hi", date: "2019-1-1", _id: "32" },
+    // { message: "hi dsfs sdf sd sdf", date: "2019-1-1", _id: "323232" },
+    // { message: "hi", date: "2019-1-1", _id: "32df" }
   ]);
+  const [inputBox, setInputBox] = useState("");
+  const [senderId, setSenderId] = useState("");
+  const [receiverId, setReceiverId] = useState("");
 
   useEffect(() => {
-    const { id: userId } = match.params;
+    socket.on(NEW_MESSAGE, data => setChat(prevState => [...prevState, data]));
+  }, []);
+
+  useEffect(() => {
+    if (!senderId) return;
+    socket.emit(USER_INFO, { userId: senderId });
+  }, [senderId]);
+
+  useEffect(() => {
+    const { id: receiver } = match.params;
+    const { sender } = queryString.parse(history.location.search);
+    setSenderId(sender);
+    setReceiverId(receiver);
+
     const fetchUserChat = async () => {
       const {
         data: { chat: messages }
-      } = await axios.get(`/chat/user-chat/${userId}`);
+      } = await axios.get(`/chat/user-chat/${receiver}`);
       setChat(messages);
     };
 
     fetchUserChat();
-  }, [match]);
+  }, [match, history]);
+
+  const sendMessage = () => {
+    const data = {
+      message: inputBox,
+      sender: senderId,
+      receiver: receiverId
+    };
+    setChat(prevState => [...prevState, data]);
+    socket.emit(MESSAGE, data);
+    setInputBox("");
+  };
 
   return (
     <section id="chat">
@@ -66,7 +69,8 @@ const UserChat = ({ history, match }) => {
             key={item._id}
             style={{
               display: "flex",
-              justifyContent: item.user === "me" ? "flex-end" : "flex-start"
+              justifyContent:
+                item.sender === senderId ? "flex-end" : "flex-start"
             }}
           >
             <Message data={item} />
@@ -74,8 +78,13 @@ const UserChat = ({ history, match }) => {
         ))}
       </div>
       <Actions>
-        <TextArea rows="1" placeholder="Message.." />
-        <Button>Send</Button>
+        <TextArea
+          value={inputBox}
+          onChange={({ target: { value } }) => setInputBox(value)}
+          rows="1"
+          placeholder="Message.."
+        />
+        <Button onClick={sendMessage}>Send</Button>
       </Actions>
     </section>
   );
