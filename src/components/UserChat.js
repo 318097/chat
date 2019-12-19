@@ -8,6 +8,7 @@ import Message from "./Message";
 import { Header, Actions } from "../styled";
 
 import socket, { USER_INFO, MESSAGE, NEW_MESSAGE } from "../socket";
+import uuid from "uuid/v1";
 
 const UserChat = ({ history, match }) => {
   const [chat, setChat] = useState([
@@ -48,7 +49,8 @@ const UserChat = ({ history, match }) => {
     const data = {
       message: inputBox,
       sender: senderId,
-      receiver: receiverId
+      receiver: receiverId,
+      tempId: uuid()
     };
     setChat(prevState => [...prevState, data]);
     socket.emit(MESSAGE, data);
@@ -66,7 +68,7 @@ const UserChat = ({ history, match }) => {
       <div className="chat-container">
         {chat.map(item => (
           <div
-            key={item._id}
+            key={item._id || item.tempId}
             style={{
               display: "flex",
               justifyContent:
