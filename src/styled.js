@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 const Header = styled.div`
   margin-bottom: 10px;
-  background: lightgrey;
-  padding: 10px 5px;
+  background: #f1f1f1;
+  padding: 5px 5px;
 `;
 
 const Actions = styled.div`

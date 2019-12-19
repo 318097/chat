@@ -1,4 +1,42 @@
-html, body, #root, .app{
+@font-face {
+  font-family: SairaExtraCondensed_Bold;
+  src: url("./assets/fonts/SairaExtraCondensed-Bold.ttf");
+}
+
+@font-face {
+  font-family: Economica_Regular;
+  src: url("./assets/fonts/Economica-Regular.ttf");
+}
+
+@font-face {
+  font-family: NanumPenScript_Regular;
+  src: url("./assets/fonts/NanumPenScript-Regular.ttf");
+}
+
+@font-face {
+  font-family: Neucha_Regular;
+  src: url("./assets/fonts/Neucha-Regular.ttf");
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+input,
+button,
+div,
+span,
+textarea,
+a {
+  font-family: Neucha_Regular !important;
+}
+
+html,
+body,
+#root {
   width: 100vw;
   height: 100vh;
   margin: 0;
@@ -6,12 +44,31 @@ html, body, #root, .app{
   overflow: hidden;
 }
 
-.app{
+i {
+  cursor: pointer;
+}
+
+.app {
   display: flex;
+  width: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0 auto;
+  border: 5px solid #f1f1f1;
   flex-direction: column;
-  .content{
+  header {
+    text-align: center;
+    h3 {
+      padding: 3px;
+      background: lightgrey;
+      margin: 5px 5px 0;
+    }
+  }
+  .content {
     flex: 1 1 auto;
-    section{
+    section {
       height: 500px;
       padding: 5px;
     }

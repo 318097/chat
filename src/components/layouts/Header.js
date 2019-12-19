@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react";
 
 const Header = () => (
-  <header className="app-header">
-    <h1>Chat</h1>
+  <header>
+    <h3>Chat</h3>
   </header>
 );
 

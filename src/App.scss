@@ -1,8 +1,17 @@
-section#chat{
+section#chat {
   display: flex;
   flex-direction: column;
-  .chat-container{
+  .chat-container {
     flex: 1 1 auto;
     overflow-y: auto;
+  }
+}
+
+section#home {
+  .list-item {
+    padding: 7px;
+    border-bottom: 2px solid lightgrey;
+    margin: 0 5px;
+    text-transform: capitalize;
   }
 }

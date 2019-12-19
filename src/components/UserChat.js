@@ -3,19 +3,15 @@ import { TextArea, Button, Icon } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import queryString from "query-string";
+import uuid from "uuid/v1";
 
 import Message from "./Message";
 import { Header, Actions } from "../styled";
 
 import socket, { USER_INFO, MESSAGE, NEW_MESSAGE } from "../socket";
-import uuid from "uuid/v1";
 
 const UserChat = ({ history, match }) => {
-  const [chat, setChat] = useState([
-    // { message: "hi", date: "2019-1-1", _id: "32" },
-    // { message: "hi dsfs sdf sd sdf", date: "2019-1-1", _id: "323232" },
-    // { message: "hi", date: "2019-1-1", _id: "32df" }
-  ]);
+  const [chat, setChat] = useState([]);
   const [inputBox, setInputBox] = useState("");
   const [senderId, setSenderId] = useState("");
   const [receiverId, setReceiverId] = useState("");
