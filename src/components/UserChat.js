@@ -4,13 +4,15 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import queryString from "query-string";
 import uuid from "uuid/v1";
+import { connect } from "react-redux";
 
 import Message from "./Message";
 import { Header, Actions } from "../styled";
+import { findSelectedUser } from "../store/actions";
 
 import socket, { USER_INFO, MESSAGE, NEW_MESSAGE } from "../socket";
 
-const UserChat = ({ history, match }) => {
+const UserChat = ({ dispatch, history, match, selectedUser }) => {
   const [chat, setChat] = useState([]);
   const [inputBox, setInputBox] = useState("");
   const [senderId, setSenderId] = useState("");
@@ -28,6 +30,7 @@ const UserChat = ({ history, match }) => {
   useEffect(() => {
     const { id: receiver } = match.params;
     const { sender } = queryString.parse(history.location.search);
+    setTimeout(() => dispatch(findSelectedUser(receiver)), 1000);
     setSenderId(sender);
     setReceiverId(receiver);
 
@@ -59,7 +62,7 @@ const UserChat = ({ history, match }) => {
         <span onClick={() => history.push("/home")}>
           <Icon name="angle double left" />
         </span>
-        <span> Username </span>
+        <span> {selectedUser && selectedUser.name} </span>
       </Header>
       <div className="chat-container">
         {chat.map(item => (
@@ -88,4 +91,6 @@ const UserChat = ({ history, match }) => {
   );
 };
 
-export default withRouter(UserChat);
+const mapStateToProps = ({ selectedUser }) => ({ selectedUser });
+
+export default connect(mapStateToProps)(withRouter(UserChat));

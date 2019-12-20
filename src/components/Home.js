@@ -1,15 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { List } from "semantic-ui-react";
 import { connect } from "react-redux";
-import { loadContactList } from "../store/actions";
 
 import ContactCard from "./ContactCard";
 
-const Home = ({ dispatch, contactList }) => {
-  useEffect(() => {
-    dispatch(loadContactList());
-  }, []);
-
+const Home = ({ contactList }) => {
   return (
     <section id="home">
       <List divided relaxed>

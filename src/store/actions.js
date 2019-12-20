@@ -1,4 +1,8 @@
-import { TOOGLE_APP_LOADING, LOAD_CONTACT_LIST } from "./constants";
+import {
+  TOOGLE_APP_LOADING,
+  LOAD_CONTACT_LIST,
+  FIND_SELECTED_USER
+} from "./constants";
 import axios from "axios";
 
 export const toggleAppLoading = status => ({
@@ -29,3 +33,8 @@ export const loadContactList = () => async dispatch => {
     });
   }
 };
+
+export const findSelectedUser = userId => ({
+  type: FIND_SELECTED_USER,
+  payload: userId
+});
