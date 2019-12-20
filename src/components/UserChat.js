@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { TextArea, Button, Icon } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
-import queryString from "query-string";
 import uuid from "uuid/v1";
 import { connect } from "react-redux";
 
@@ -12,10 +12,9 @@ import { findSelectedUser } from "../store/actions";
 
 import socket, { USER_INFO, MESSAGE, NEW_MESSAGE } from "../socket";
 
-const UserChat = ({ dispatch, history, match, selectedUser }) => {
+const UserChat = ({ dispatch, history, match, selectedUser, session }) => {
   const [chat, setChat] = useState([]);
   const [inputBox, setInputBox] = useState("");
-  const [senderId, setSenderId] = useState("");
   const [receiverId, setReceiverId] = useState("");
 
   useEffect(() => {
@@ -23,15 +22,13 @@ const UserChat = ({ dispatch, history, match, selectedUser }) => {
   }, []);
 
   useEffect(() => {
-    if (!senderId) return;
-    socket.emit(USER_INFO, { userId: senderId });
-  }, [senderId]);
+    if (!session || !session.userId) return;
+    socket.emit(USER_INFO, { userId: session.userId });
+  }, [session]);
 
   useEffect(() => {
     const { id: receiver } = match.params;
-    const { sender } = queryString.parse(history.location.search);
     setTimeout(() => dispatch(findSelectedUser(receiver)), 1000);
-    setSenderId(sender);
     setReceiverId(receiver);
 
     const fetchUserChat = async () => {
@@ -40,14 +37,13 @@ const UserChat = ({ dispatch, history, match, selectedUser }) => {
       } = await axios.get(`/chat/user-chat/${receiver}`);
       setChat(messages);
     };
-
-    fetchUserChat();
-  }, [match, history]);
+    if (session) fetchUserChat();
+  }, [match, session]);
 
   const sendMessage = () => {
     const data = {
       message: inputBox,
-      sender: senderId,
+      sender: session.userId,
       receiver: receiverId,
       tempId: uuid()
     };
@@ -71,7 +67,7 @@ const UserChat = ({ dispatch, history, match, selectedUser }) => {
             style={{
               display: "flex",
               justifyContent:
-                item.sender === senderId ? "flex-end" : "flex-start"
+                item.sender === session.userId ? "flex-end" : "flex-start"
             }}
           >
             <Message data={item} />
@@ -80,10 +76,12 @@ const UserChat = ({ dispatch, history, match, selectedUser }) => {
       </div>
       <Actions>
         <TextArea
-          value={inputBox}
-          onChange={({ target: { value } }) => setInputBox(value)}
+          autoFocus
           rows="1"
           placeholder="Message.."
+          value={inputBox}
+          onChange={({ target: { value } }) => setInputBox(value)}
+          onKeyPress={({ which }) => (which === 13 ? sendMessage() : null)}
         />
         <Button onClick={sendMessage}>Send</Button>
       </Actions>
@@ -91,6 +89,9 @@ const UserChat = ({ dispatch, history, match, selectedUser }) => {
   );
 };
 
-const mapStateToProps = ({ selectedUser }) => ({ selectedUser });
+const mapStateToProps = ({ selectedUser, session }) => ({
+  selectedUser,
+  session
+});
 
 export default connect(mapStateToProps)(withRouter(UserChat));

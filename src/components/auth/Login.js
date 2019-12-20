@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { Input, Button } from "semantic-ui-react";
 
-import { setToken, isLoggedIn } from "../../authService";
+import { setToken, setUser, isLoggedIn } from "../../authService";
 import { getSession } from "../../store/selectors";
 import { setSession } from "../../store/actions";
 
@@ -16,17 +16,23 @@ const Login = ({ history, setSession }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isLoggedIn()) history.push("/home");
+    if (isLoggedIn()) {
+      setSession({ loggedIn: true, info: "LOGIN" });
+      history.push("/home");
+    }
   }, []);
 
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post(`/auth/login`, { username, password });
+      const {
+        data: { token, user }
+      } = await axios.post(`/auth/login`, { username, password });
 
-      setToken(data.token);
+      setToken(token);
+      setUser(user);
 
-      setSession({ loggedIn: true, info: "LOGIN" });
+      setSession({ loggedIn: true, info: "LOGIN", ...user });
       history.push("/home");
     } catch (err) {
       // const { data: errorMessage } = err.response;

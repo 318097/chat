@@ -59,11 +59,15 @@ i {
   border: 5px solid #f1f1f1;
   flex-direction: column;
   header {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    background: lightgrey;
+    padding: 3px;
+    margin: 5px 5px 0;
     h3 {
-      padding: 3px;
-      background: lightgrey;
-      margin: 5px 5px 0;
+      margin: 0;
+      padding: 0;
+      flex: 1 1 auto;
     }
   }
   .content {

@@ -7,7 +7,7 @@ import {
 
 const initialState = {
   appLoading: false,
-  session: null,
+  session: { loggedIn: false, info: "" },
   contactList: [],
   selectedUser: null
 };
