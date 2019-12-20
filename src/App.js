@@ -8,11 +8,13 @@ import config from "./config";
 import Header from "./components/layouts/Header";
 
 import Home from "./components/Home";
+import Login from "./components/auth/Login";
 import UserChat from "./components/UserChat";
 
 import { loadContactList } from "./store/actions";
 
 import socket, { CONNECT } from "./socket";
+
 import "./App.scss";
 
 axios.defaults.baseURL = config.SERVER_URL;
@@ -29,6 +31,7 @@ const App = ({ dispatch }) => {
       <Header />
       <div className="content">
         <Switch>
+          <Route path="/login" exact component={Login} />
           <Route path="/home" exact component={Home} />
           <Route path="/user/:id" exact component={UserChat} />
           <Route path="/" exact render={() => <Redirect to="/home" />} />

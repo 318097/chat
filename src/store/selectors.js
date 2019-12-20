@@ -4,4 +4,6 @@ const getState = state => state;
 
 const getAppLoading = createSelector(getState, state => state.appLoading);
 
-export { getAppLoading };
+const getSession = createSelector(getState, state => state.session);
+
+export { getAppLoading, getSession };

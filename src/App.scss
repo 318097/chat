@@ -15,3 +15,11 @@ section#home {
     text-transform: capitalize;
   }
 }
+
+section#login {
+  text-align: center;
+  .input {
+    margin: 2px;
+    display: block;
+  }
+}

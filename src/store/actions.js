@@ -1,5 +1,6 @@
 import {
   TOOGLE_APP_LOADING,
+  SET_SESSION,
   LOAD_CONTACT_LIST,
   FIND_SELECTED_USER
 } from "./constants";
@@ -38,3 +39,5 @@ export const findSelectedUser = userId => ({
   type: FIND_SELECTED_USER,
   payload: userId
 });
+
+export const setSession = session => ({ type: SET_SESSION, payload: session });
