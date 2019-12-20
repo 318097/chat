@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 
+import { getAppLoading } from "../../store/selectors";
+
 const Header = ({ appLoading }) => (
   <header>
     <h3>
@@ -14,6 +16,6 @@ const Header = ({ appLoading }) => (
   </header>
 );
 
-const mapStateToProps = ({ appLoading }) => ({ appLoading });
+const mapStateToProps = state => ({ appLoading: getAppLoading(state) });
 
 export default connect(mapStateToProps)(Header);
