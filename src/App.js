@@ -9,6 +9,7 @@ import Header from "./components/layouts/Header";
 
 import Home from "./components/Home";
 import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
 import UserChat from "./components/UserChat";
 
 import { loadContactList } from "./store/actions";
@@ -32,6 +33,7 @@ const App = ({ dispatch }) => {
       <div className="content">
         <Switch>
           <Route path="/login" exact component={Login} />
+          <Route path="/register" exact component={Register} />
           <Route path="/home" exact component={Home} />
           <Route path="/user/:id" exact component={UserChat} />
           <Route path="/" exact render={() => <Redirect to="/home" />} />
