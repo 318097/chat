@@ -1,9 +1,19 @@
 import React from "react";
+import { connect } from "react-redux";
 
-const Header = () => (
+const Header = ({ appLoading }) => (
   <header>
-    <h3>Chat</h3>
+    <h3>
+      Chat{" "}
+      {appLoading && (
+        <div className="ui active dimmer">
+          <div className="ui loader"></div>
+        </div>
+      )}
+    </h3>
   </header>
 );
 
-export default Header;
+const mapStateToProps = ({ appLoading }) => ({ appLoading });
+
+export default connect(mapStateToProps)(Header);

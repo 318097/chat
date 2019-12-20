@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import { List } from "semantic-ui-react";
+import { connect } from "react-redux";
+import { loadContactList } from "../store/actions";
 
 import ContactCard from "./ContactCard";
 
-const Home = () => {
-  const [contactList, setContactList] = useState([]);
-
+const Home = ({ dispatch, contactList }) => {
   useEffect(() => {
-    const fetchContactList = async () => {
-      const {
-        data: { contacts }
-      } = await axios.get(`/chat/contact-list`);
-      setContactList(contacts);
-    };
-    fetchContactList();
+    dispatch(loadContactList());
   }, []);
 
   return (
@@ -28,4 +21,6 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapStateToProps = ({ contactList }) => ({ contactList });
+
+export default connect(mapStateToProps)(Home);
