@@ -5,6 +5,16 @@ section#chat {
     flex: 1 1 auto;
     overflow-y: auto;
   }
+  .message-types {
+    background: lightgrey;
+    border-radius: 15px;
+    padding: 5px 20px;
+    margin: 5px auto;
+    text-align: center;
+    .radio {
+      margin-left: 15px;
+    }
+  }
 }
 
 section#home {

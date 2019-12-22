@@ -11,7 +11,7 @@ const Actions = styled.div`
   background: inherit;
   position: relative;
   display: flex;
-  margin-top: 15px;
+  margin-top: 5px;
   textarea,
   button {
     margin: 0 2px;

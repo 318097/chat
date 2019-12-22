@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { TextArea, Button, Icon } from "semantic-ui-react";
+import { TextArea, Button, Icon, Radio } from "semantic-ui-react";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 import uuid from "uuid/v1";
@@ -10,15 +10,24 @@ import Message from "./Message";
 import { Header, Actions } from "../styled";
 import { findSelectedUser } from "../store/actions";
 
-import socket, { USER_INFO, MESSAGE, NEW_MESSAGE } from "../socket";
+import socket, {
+  USER_INFO,
+  MESSAGE,
+  NEW_MESSAGE,
+  UPDATE_MESSAGE_REQUEST,
+  MESSAGE_UPDATE
+} from "../socket";
 
 const UserChat = ({ dispatch, history, match, selectedUser, session }) => {
   const [chat, setChat] = useState([]);
   const [inputBox, setInputBox] = useState("");
   const [receiverId, setReceiverId] = useState("");
+  const [messageType, setMessageType] = useState("NORMAL");
+  const [selectedMessage, setSelectedMessage] = useState(null);
 
   useEffect(() => {
     socket.on(NEW_MESSAGE, data => setChat(prevState => [...prevState, data]));
+    socket.on(MESSAGE_UPDATE, updateMessage);
   }, []);
 
   useEffect(() => {
@@ -40,15 +49,68 @@ const UserChat = ({ dispatch, history, match, selectedUser, session }) => {
     if (session) fetchUserChat();
   }, [match, session]);
 
-  const sendMessage = () => {
+  useEffect(() => {
+    console.log("selectedMessage:", selectedMessage);
+  }, [selectedMessage]);
+
+  const updateMessage = ({ metaInfo = {}, ...update }) =>
+    setChat(prevState => {
+      const messages = [...prevState];
+      // console.log(messages);
+      for (let i = messages.length - 1; i >= 0; i--) {
+        if (
+          messages[i].tempId === update.tempId ||
+          messages[i]._id === update._id
+        ) {
+          messages[i] = {
+            ...messages[i],
+            ...update,
+            metaInfo: { ...messages[i].metaInfo, ...metaInfo }
+          };
+          break;
+        }
+      }
+      console.log(messages);
+      return messages;
+    });
+
+  const attachToMessage = () => {
     const data = {
-      message: inputBox,
+      userId: session.userId,
+      message: inputBox.trim(),
+      tempId: selectedMessage.tempId,
+      _id: selectedMessage._id
+    };
+    socket.emit(UPDATE_MESSAGE_REQUEST, data);
+    setInputBox("");
+    setSelectedMessage(null);
+    setMessageType("NORMAL");
+  };
+
+  const sendMessage = () => {
+    if (!inputBox.trim()) return;
+    // console.log("selected message:", selectedMessage);
+    if (selectedMessage) return attachToMessage();
+
+    const tempId = uuid();
+    const data = {
+      message: inputBox.trim(),
       sender: session.userId,
       receiver: receiverId,
-      tempId: uuid()
+      messageType,
+      tempId
     };
     setChat(prevState => [...prevState, data]);
+
     socket.emit(MESSAGE, data);
+
+    if (messageType === "CONFESS") {
+      setSelectedMessage({
+        tempId,
+        metaInfo: {},
+        messageType
+      });
+    }
     setInputBox("");
   };
 
@@ -70,8 +132,25 @@ const UserChat = ({ dispatch, history, match, selectedUser, session }) => {
                 item.sender === session.userId ? "flex-end" : "flex-start"
             }}
           >
-            <Message data={item} />
+            <Message
+              userId={session.userId}
+              data={item}
+              selectedMessage={selectedMessage}
+              setSelectedMessage={setSelectedMessage}
+            />
           </div>
+        ))}
+      </div>
+      <div className="message-types">
+        {["NORMAL", "CONFESS", "FUTURE"].map(type => (
+          <Radio
+            key={type}
+            label={type}
+            name="messageType"
+            value={type}
+            checked={messageType === type}
+            onChange={(e, { value }) => setMessageType(value)}
+          />
         ))}
       </div>
       <Actions>
