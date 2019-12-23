@@ -9,6 +9,7 @@ import "./App.scss";
 
 import Header from "./components/layouts/Header";
 import Home from "./components/Home";
+import PrivateRoute from "./components/auth/PrivateRoute";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import UserChat from "./components/UserChat";
@@ -43,8 +44,8 @@ const App = ({ session, setSession, loadContactList }) => {
         <Switch>
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
-          <Route path="/home" exact component={Home} />
-          <Route path="/user/:id" exact component={UserChat} />
+          <PrivateRoute path="/home" exact component={Home} />
+          <PrivateRoute path="/user/:id" exact component={UserChat} />
           <Route path="/" exact render={() => <Redirect to="/home" />} />
         </Switch>
       </div>
