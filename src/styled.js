@@ -11,13 +11,23 @@ const Actions = styled.div`
   background: inherit;
   position: relative;
   display: flex;
-  margin-top: 5px;
-  textarea,
+  margin-top: 2px;
+  & > div {
+    flex: 1 1 auto;
+    position: relative;
+    textarea {
+      width: 99%;
+      height: 100%;
+    }
+    .message-types-icon {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
   button {
     margin: 0 2px;
-  }
-  textarea {
-    flex: 1 1 auto;
   }
 `;
 

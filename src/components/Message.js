@@ -1,16 +1,17 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 import { Icon } from "semantic-ui-react";
 
 const Wrapper = styled.div`
   background: ${({ userId, sender }) =>
-    userId === sender ? "orange" : "skyblue"};
+    userId === sender ? "tomato" : "#0c7aa7"};
   padding: 2px 7px;
   display: inline-block;
   max-width: 60%;
   border-radius: 10px;
   margin: 2px 5px;
-  cursor: pointer;
+  cursor: ${({ messageType }) =>
+    messageType === "CONFESS" ? "pointer" : "normal"};
   position: relative;
   &:before {
     content: "";
@@ -18,8 +19,9 @@ const Wrapper = styled.div`
     width: 4px;
     height: 4px;
     border-radius: 50%;
-    right: -5px;
     top: calc(50% - 2px);
+    right: ${({ sender, userId }) => sender === userId && "-5px"};
+    left: ${({ sender, userId }) => sender !== userId && "-5px"};
     background: ${({ messageType }) =>
       messageType === "NORMAL" ? "white" : "grey"};
   }
@@ -27,8 +29,6 @@ const Wrapper = styled.div`
     padding: 0;
     display: flex;
     flex-direction: column;
-    .message {
-    }
     .date {
       font-size: 60%;
       font-style: italic;
@@ -39,16 +39,40 @@ const Wrapper = styled.div`
     top: 50%;
     transform: translateY(-50%);
   }
-  .left {
+  .selected-message.left {
     left: -20px;
   }
-  .right {
+  .selected-message.right {
     right: -25px;
+  }
+  .info {
+    font-style: italic;
+    font-size: 0.8em;
+    color: white;
   }
 `;
 
 const findReceiverId = (userId, metaInfo) =>
   Object.keys(metaInfo).find(id => id !== userId);
+
+const ConfessBox = ({ userId, metaInfo = {} }) => {
+  const userResponse = metaInfo[userId];
+  const receiverId = findReceiverId(userId, metaInfo);
+  const receiverResponse = metaInfo[receiverId];
+
+  return (
+    <Fragment>
+      {userResponse && <div>You: {userResponse}</div>}
+      {!userResponse && receiverResponse ? (
+        <div className="info">Received 1response.</div>
+      ) : userResponse && receiverResponse ? (
+        <div>Other: {receiverResponse}</div>
+      ) : (
+        <div className="info">No response.</div>
+      )}
+    </Fragment>
+  );
+};
 
 const Message = ({
   userId,
@@ -56,7 +80,6 @@ const Message = ({
     message,
     createdAt,
     sender,
-    receiver,
     messageType = "NORMAL",
     metaInfo = {},
     _id,
@@ -67,6 +90,11 @@ const Message = ({
 }) => {
   const handleClick = () => {
     if (messageType === "CONFESS") {
+      if (
+        selectedMessage &&
+        (selectedMessage._id === _id || selectedMessage.tempId === tempId)
+      )
+        return setSelectedMessage(null);
       setSelectedMessage({
         metaInfo,
         messageType,
@@ -85,19 +113,13 @@ const Message = ({
       _id={_id}
     >
       <div>
-        <span className="message">
-          {message}
+        <div className="message">
+          <div>{message}</div>
           {messageType === "CONFESS" && (
-            <span>
-              <br />
-              {metaInfo[userId] && <span>You: {metaInfo[userId]}</span>}
-              {metaInfo && metaInfo[sender] && metaInfo[receiver] && (
-                <span>Other: {metaInfo[findReceiverId(userId, metaInfo)]}</span>
-              )}
-            </span>
+            <ConfessBox metaInfo={metaInfo} userId={userId} />
           )}
-        </span>
-        {/* <span className="date">{createdAt}</span> */}
+        </div>
+        {/* <span className="date">{new Date(createdAt)}</span> */}
       </div>
       {messageType === "CONFESS" &&
         selectedMessage &&

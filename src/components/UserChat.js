@@ -23,6 +23,7 @@ const UserChat = ({ dispatch, history, match, selectedUser, session }) => {
   const [inputBox, setInputBox] = useState("");
   const [receiverId, setReceiverId] = useState("");
   const [messageType, setMessageType] = useState("NORMAL");
+  const [messageTypesVisibile, setMessageTypesVisibile] = useState(false);
   const [selectedMessage, setSelectedMessage] = useState(null);
 
   useEffect(() => {
@@ -49,14 +50,11 @@ const UserChat = ({ dispatch, history, match, selectedUser, session }) => {
     if (session) fetchUserChat();
   }, [match, session]);
 
-  useEffect(() => {
-    console.log("selectedMessage:", selectedMessage);
-  }, [selectedMessage]);
+  useEffect(() => {}, [selectedMessage]);
 
   const updateMessage = ({ metaInfo = {}, ...update }) =>
     setChat(prevState => {
       const messages = [...prevState];
-      // console.log(messages);
       for (let i = messages.length - 1; i >= 0; i--) {
         if (
           messages[i].tempId === update.tempId ||
@@ -70,7 +68,6 @@ const UserChat = ({ dispatch, history, match, selectedUser, session }) => {
           break;
         }
       }
-      console.log(messages);
       return messages;
     });
 
@@ -89,7 +86,6 @@ const UserChat = ({ dispatch, history, match, selectedUser, session }) => {
 
   const sendMessage = () => {
     if (!inputBox.trim()) return;
-    // console.log("selected message:", selectedMessage);
     if (selectedMessage) return attachToMessage();
 
     const tempId = uuid();
@@ -141,27 +137,36 @@ const UserChat = ({ dispatch, history, match, selectedUser, session }) => {
           </div>
         ))}
       </div>
-      <div className="message-types">
-        {["NORMAL", "CONFESS", "FUTURE"].map(type => (
-          <Radio
-            key={type}
-            label={type}
-            name="messageType"
-            value={type}
-            checked={messageType === type}
-            onChange={(e, { value }) => setMessageType(value)}
-          />
-        ))}
-      </div>
+      {messageTypesVisibile && (
+        <div className="message-types">
+          {["NORMAL", "CONFESS", "FUTURE"].map(type => (
+            <Radio
+              key={type}
+              label={type}
+              name="messageType"
+              value={type}
+              checked={messageType === type}
+              onChange={(e, { value }) => setMessageType(value)}
+            />
+          ))}
+        </div>
+      )}
       <Actions>
-        <TextArea
-          autoFocus
-          rows="1"
-          placeholder="Message.."
-          value={inputBox}
-          onChange={({ target: { value } }) => setInputBox(value)}
-          onKeyPress={({ which }) => (which === 13 ? sendMessage() : null)}
-        />
+        <div>
+          <TextArea
+            autoFocus
+            rows="1"
+            placeholder="Message.."
+            value={inputBox}
+            onChange={({ target: { value } }) => setInputBox(value)}
+            onKeyPress={({ which }) => (which === 13 ? sendMessage() : null)}
+          />
+          <Icon
+            className="message-types-icon"
+            onClick={() => setMessageTypesVisibile(prev => !prev)}
+            name={messageTypesVisibile ? "minus" : "plus"}
+          />
+        </div>
         <Button onClick={sendMessage}>Send</Button>
       </Actions>
     </section>
