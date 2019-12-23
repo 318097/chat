@@ -46,6 +46,7 @@ body,
 
 i {
   cursor: pointer;
+  margin: 2px;
 }
 
 .app {
@@ -56,25 +57,53 @@ i {
   left: 50%;
   transform: translate(-50%, -50%);
   margin: 0 auto;
-  border: 5px solid #f1f1f1;
   flex-direction: column;
+  padding: 0;
   header {
     display: flex;
     align-items: center;
-    background: lightgrey;
-    padding: 3px;
-    margin: 5px 5px 0;
+    background: #f9f9f9;
+    padding: 10px 3px;
+    margin: 0;
     h3 {
       margin: 0;
       padding: 0;
       flex: 1 1 auto;
+    }
+    .username {
+      margin: 0 5px;
+      padding: 1px 3px;
+      border-radius: 5px;
+      background: lightgrey;
     }
   }
   .content {
     flex: 1 1 auto;
     section {
       height: 500px;
-      padding: 5px;
     }
   }
+}
+
+/* Custom scrollbar */
+/* width */
+::-webkit-scrollbar {
+  width: 5px !important;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(71, 71, 71);
+  border-radius: 15px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(2, 67, 104);
 }

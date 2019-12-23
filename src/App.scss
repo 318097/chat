@@ -1,7 +1,16 @@
+section#home {
+  .list-item {
+    padding: 7px;
+    margin: 0 5px;
+    text-transform: capitalize;
+  }
+}
+
 section#chat {
   display: flex;
   flex-direction: column;
   .chat-container {
+    padding: 5px;
     flex: 1 1 auto;
     overflow-y: auto;
   }
@@ -14,15 +23,6 @@ section#chat {
     .radio {
       margin-left: 15px;
     }
-  }
-}
-
-section#home {
-  .list-item {
-    padding: 7px;
-    border-bottom: 2px solid lightgrey;
-    margin: 0 5px;
-    text-transform: capitalize;
   }
 }
 

@@ -7,7 +7,13 @@ import { getAppLoading } from "../../store/selectors";
 const Header = ({ appLoading, name }) => (
   <header>
     <h3>Chat {appLoading && <Icon loading name="spinner" />}</h3>
-    <span>{name}</span>
+    <span>
+      <span className="username">
+        <Icon name="user outline" />
+        {name}
+      </span>
+      <Icon name="log out" />
+    </span>
   </header>
 );
 
