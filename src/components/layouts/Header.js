@@ -1,10 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Icon } from "semantic-ui-react";
+import { withRouter } from "react-router-dom";
 
+import { setSession } from "../../store/actions";
 import { getAppLoading } from "../../store/selectors";
 
-const Header = ({ appLoading, session }) => (
+const Header = ({ appLoading, session, dispatch, history }) => (
   <header>
     <h3>Chat {appLoading && <Icon loading name="spinner" />}</h3>
     {session && session.loggedIn && (
@@ -13,7 +15,15 @@ const Header = ({ appLoading, session }) => (
           <Icon name="user outline" />
           {session.name || ""}
         </span>
-        <Icon name="log out" />
+        <Icon
+          onClick={() => {
+            localStorage.clear();
+            sessionStorage.clear();
+            history.push("/login");
+            dispatch(setSession({ loggedIn: false, info: "" }));
+          }}
+          name="log out"
+        />
       </span>
     )}
   </header>
@@ -24,4 +34,4 @@ const mapStateToProps = state => ({
   session: state.session
 });
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps)(withRouter(Header));
