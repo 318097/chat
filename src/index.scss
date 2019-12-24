@@ -49,6 +49,10 @@ i {
   margin: 2px;
 }
 
+body {
+  background: url("./assets/backgrounds/funky-lines.png");
+}
+
 .app {
   display: flex;
   width: 400px;
@@ -62,7 +66,7 @@ i {
   header {
     display: flex;
     align-items: center;
-    background: #f9f9f9;
+    border-bottom: 5px solid white;
     padding: 10px 3px;
     margin: 0;
     h3 {
@@ -81,6 +85,27 @@ i {
     flex: 1 1 auto;
     section {
       height: 500px;
+    }
+  }
+  .background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: -1;
+    div:nth-child(1) {
+      flex: 1;
+      background: #92b36f;
+    }
+    div:nth-child(2) {
+      flex: 1.6;
+      background: #f1b748;
+    }
+    div:nth-child(3) {
+      flex: 2.2;
+      background: #818ca1;
     }
   }
 }
@@ -105,5 +130,5 @@ i {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(2, 67, 104);
+  background: #bba7a1;
 }

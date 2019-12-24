@@ -49,6 +49,11 @@ const App = ({ session, setSession, loadContactList }) => {
           <Route path="/" exact render={() => <Redirect to="/home" />} />
         </Switch>
       </div>
+      <div className="background">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
   );
 };

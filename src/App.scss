@@ -15,7 +15,7 @@ section#chat {
     overflow-y: auto;
   }
   .message-types {
-    background: lightgrey;
+    background: rgb(255, 255, 255);
     border-radius: 15px;
     padding: 5px 20px;
     margin: 2px auto;
@@ -28,6 +28,7 @@ section#chat {
 
 section#login,
 section#register {
+  padding-top: 20px;
   text-align: center;
   .input {
     margin: 2px;

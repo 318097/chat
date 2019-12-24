@@ -4,7 +4,7 @@ import { Icon } from "semantic-ui-react";
 
 const Wrapper = styled.div`
   background: ${({ userId, sender }) =>
-    userId === sender ? "tomato" : "#0c7aa7"};
+    userId === sender ? "#8aa27d" : "#ef424c"};
   padding: 2px 7px;
   display: inline-block;
   max-width: 60%;
@@ -22,8 +22,9 @@ const Wrapper = styled.div`
     top: calc(50% - 2px);
     right: ${({ sender, userId }) => sender === userId && "-5px"};
     left: ${({ sender, userId }) => sender !== userId && "-5px"};
-    background: ${({ messageType }) =>
-      messageType === "NORMAL" ? "white" : "grey"};
+    background: black;
+    display: ${({ messageType }) =>
+      messageType === "NORMAL" ? "none" : "block"};
   }
   & > div {
     padding: 0;
